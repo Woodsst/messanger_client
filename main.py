@@ -2,7 +2,7 @@ from client.login_window import Login
 
 
 def main():
-    login = Login()
+    login = Login('localhost:5000')
     login.run()
 
 

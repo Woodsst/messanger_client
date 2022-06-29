@@ -1,21 +1,19 @@
-from tkinter import Tk, StringVar, ttk
+from tkinter import StringVar, ttk, messagebox
+from client.base import TkinterBaseFrame
+from client.grpc_connect import AuthorizationServerConnector
+from client.authorization_pb2 import RegisterCodeResult, LoginCodeResult
 
 
-class Login:
+class Login(TkinterBaseFrame):
     """Login window"""
 
-    def __init__(self):
-        self.root = Tk()
+    def __init__(self, server_address: str):
+        TkinterBaseFrame.__init__(self)
+        self.server_address = server_address
         self.root.wm_title("Login")
-        self.frame = ttk.Frame(self.root, padding=5)
-        self.frame.grid()
         self.username = StringVar()
         self.password = StringVar()
         self.get_frame_constructing()
-
-    def run(self):
-        """Start show app"""
-        self.root.mainloop()
 
     def get_frame_constructing(self):
         """Method that collects all the parts of the frame"""
@@ -53,10 +51,68 @@ class Login:
         registration_button.grid(column=1, row=3, pady=5, padx=5, sticky='e')
 
     def registration(self):
-        """Registration form"""
-        pass
+        """Connect and registration request"""
+
+        connect = AuthorizationServerConnector(
+            address_authorization_server=self.server_address
+        )
+
+        result = connect.registration_request(self.username.get(), self.password.get())
+        self.registration_result_handler(result)
 
     def login(self):
-        """Command to send credentials to the server"""
+        """Connect and login request"""
+
+        connect = AuthorizationServerConnector(
+            address_authorization_server=self.server_address
+        )
+
+        result = connect.authorization_request(self.username.get(), self.password.get())
+        if self.authorization_result_handler(result):
+            connect.connection_close()
+            self.open_main_app()
+
+    def open_main_app(self):
         pass
 
+    @staticmethod
+    def registration_result_handler(result: RegisterCodeResult):
+        """Handle response server to registration request"""
+
+        if result == RegisterCodeResult.Value('RCR_ok'):
+            messagebox.showinfo(message='Thank you for registering',
+                                title='Registration')
+
+        elif result == RegisterCodeResult.Value('RCR_undefined'):
+            messagebox.showerror(message='Wrong username or password'
+                                 , title='Registration')
+
+        elif result == RegisterCodeResult.Value('RCR_already_exist'):
+            messagebox.showerror(message='User already exists',
+                                 title='Registration')
+
+        else:
+            messagebox.showerror(message='Unknown error',
+                                 title='Registration')
+
+    @staticmethod
+    def authorization_result_handler(result: RegisterCodeResult) -> bool:
+        """Handle response server to login request"""
+
+        if result == LoginCodeResult.Value('LCR_ok'):
+            messagebox.showinfo(message='Hello!',
+                                title='Registration')
+            return True
+
+        elif result == LoginCodeResult.Value('LCR_undefined'):
+            messagebox.showerror(message='Wrong username or password'
+                                 , title='Registration')
+
+        elif result == LoginCodeResult.Value('LCR_unknown_user'):
+            messagebox.showerror(message="User not found",
+                                 title='Registration')
+
+        else:
+            messagebox.showerror(message='Unknown error',
+                                 title='Registration')
+        return False
