@@ -1,1 +1,4 @@
 venv
+.idea
+client/ex.py
+client/__pycache__/
