@@ -2,14 +2,17 @@ from tkinter import StringVar, ttk, messagebox
 from client.base import TkinterBaseFrame
 from client.grpc_connect import AuthorizationServerConnector
 from client.authorization_pb2 import RegisterCodeResult, LoginCodeResult
+from client.main_window import MainWindow
 
 
 class Login(TkinterBaseFrame):
     """Login window"""
 
-    def __init__(self, server_address: str):
+    def __init__(self, address_authorization_server: str,
+                 address_messanger_server: str):
         TkinterBaseFrame.__init__(self)
-        self.server_address = server_address
+        self.messanger_dress = address_messanger_server
+        self.server_address = address_authorization_server
         self.root.wm_title("Login")
         self.username = StringVar()
         self.password = StringVar()
@@ -73,7 +76,11 @@ class Login(TkinterBaseFrame):
             self.open_main_app()
 
     def open_main_app(self):
-        pass
+        """Destroy login window and run main window"""
+
+        self.root.destroy()
+        main = MainWindow(self.messanger_dress)
+        main.run()
 
     @staticmethod
     def registration_result_handler(result: RegisterCodeResult):
