@@ -2,6 +2,10 @@ import abc
 from tkinter import Tk, ttk
 from abc import ABC
 
+import grpc
+
+from client.authorization_pb2_grpc import GreeterStub
+
 
 class FramesConstruct(ABC):
     """ABC class for constructing windows and frames in tkinter"""
@@ -32,3 +36,26 @@ class TkinterBaseFrame(FramesConstruct):
     def get_frame_constructing(self):
         """Constructing frames"""
         pass
+
+
+class ABCConnectGRPC(ABC):
+    """abstract base to connect gRPC"""
+
+    def __init__(self, server_address: str):
+        self.authorization_server = server_address
+        self.channel = grpc.insecure_channel(self.authorization_server)
+        self.stub = GreeterStub(self.channel)
+
+    @abc.abstractmethod
+    def connection_close(self):
+        """Method to close connecting"""
+        raise NotImplementedError
+
+
+class ConnectGRPC(ABCConnectGRPC):
+    """Base for connet to gRPC server"""
+
+    def connection_close(self):
+        """Method to close connect after ended all operations"""
+
+        self.channel.close()

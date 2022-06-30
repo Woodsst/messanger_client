@@ -11,12 +11,14 @@ class Login(TkinterBaseFrame):
     def __init__(self, address_authorization_server: str,
                  address_messanger_server: str):
         TkinterBaseFrame.__init__(self)
-        self.messanger_dress = address_messanger_server
+        self.messanger_address = address_messanger_server
         self.server_address = address_authorization_server
         self.root.wm_title("Login")
         self.username = StringVar()
         self.password = StringVar()
         self.get_frame_constructing()
+        self.connect = AuthorizationServerConnector(
+            self.server_address)
 
     def get_frame_constructing(self):
         """Method that collects all the parts of the frame"""
@@ -54,32 +56,24 @@ class Login(TkinterBaseFrame):
         registration_button.grid(column=1, row=3, pady=5, padx=5, sticky='e')
 
     def registration(self):
-        """Connect and registration request"""
+        """Registration request"""
 
-        connect = AuthorizationServerConnector(
-            address_authorization_server=self.server_address
-        )
-
-        result = connect.registration_request(self.username.get(), self.password.get())
+        result = self.connect.registration_request(self.username.get(), self.password.get())
         self.registration_result_handler(result)
 
     def login(self):
-        """Connect and login request"""
+        """login request"""
 
-        connect = AuthorizationServerConnector(
-            address_authorization_server=self.server_address
-        )
-
-        result = connect.authorization_request(self.username.get(), self.password.get())
+        result = self.connect.authorization_request(self.username.get(), self.password.get())
         if self.authorization_result_handler(result):
-            connect.connection_close()
+            self.connect.connection_close()
             self.open_main_app()
 
     def open_main_app(self):
         """Destroy login window and run main window"""
 
         self.root.destroy()
-        main = MainWindow(self.messanger_dress)
+        main = MainWindow(self.messanger_address)
         main.run()
 
     @staticmethod
