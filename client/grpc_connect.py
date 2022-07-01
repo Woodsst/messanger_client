@@ -12,8 +12,7 @@ class AuthorizationServerConnector(ConnectGRPC):
             user_name=user_name,
             user_passwd=passwd
         ))
-
-        return response.code
+        return response
 
     def authorization_request(self, user_name: str, passwd: str):
         """Reqeust to authorization server for login"""
@@ -22,5 +21,4 @@ class AuthorizationServerConnector(ConnectGRPC):
             user_name=user_name,
             user_passwd=passwd
         ))
-
-        return response.code
+        return response

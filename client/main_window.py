@@ -7,10 +7,11 @@ from client.base import TkinterBaseFrame
 class MainWindow(TkinterBaseFrame):
     """Central window"""
 
-    def __init__(self, server_address: str):
+    def __init__(self, server_address: str, token: str):
 
         TkinterBaseFrame.__init__(self)
         self.messanger_address = server_address
+        self.token = token
         self.friend_list = ['user_1', 'user_2']
         self.room_list = ['room_1', 'room_2']
         self.get_frame_constructing()

@@ -59,21 +59,21 @@ class Login(TkinterBaseFrame):
         """Registration request"""
 
         result = self.connect.registration_request(self.username.get(), self.password.get())
-        self.registration_result_handler(result)
+        self.registration_result_handler(result.code)
 
     def login(self):
         """login request"""
 
         result = self.connect.authorization_request(self.username.get(), self.password.get())
-        if self.authorization_result_handler(result):
+        if self.authorization_result_handler(result.code):
             self.connect.connection_close()
-            self.open_main_app()
+            self.open_main_app(result.token)
 
-    def open_main_app(self):
+    def open_main_app(self, token: str):
         """Destroy login window and run main window"""
 
         self.root.destroy()
-        main = MainWindow(self.messanger_address)
+        main = MainWindow(self.messanger_address, token)
         main.run()
 
     @staticmethod
