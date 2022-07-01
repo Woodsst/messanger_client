@@ -1,10 +1,12 @@
 import tkinter
-from tkinter import ttk
+from tkinter import ttk, StringVar
 
 from client.base import TkinterBaseFrame
+from client.grpc_connect import MessangerServerConnector
+from client.status_code_handler import MessangerStatusCodeHandler
 
 
-class MainWindow(TkinterBaseFrame):
+class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
     """Central window"""
 
     def __init__(self, server_address: str, token: str):
@@ -14,7 +16,11 @@ class MainWindow(TkinterBaseFrame):
         self.token = token
         self.friend_list = ['user_1', 'user_2']
         self.room_list = ['room_1', 'room_2']
+        self.field = StringVar()
         self.get_frame_constructing()
+        self.connect = MessangerServerConnector(
+            server_address
+        )
 
     def get_frame_constructing(self):
         """Get all frames"""
@@ -22,9 +28,18 @@ class MainWindow(TkinterBaseFrame):
         self.friends_list()
         self.rooms_list()
         self.buttons()
+        self.input_fields()
 
     def add_friend(self):
-        pass
+        get_field = self.field.get()
+        result = self.connect.add_friend(
+            get_field,
+            self.token
+        )
+        status = self.result_handler(result.status)
+        if status:
+            self.friend_list.append(get_field)
+            self.friends_list()
 
     def delete_friend(self):
         pass
@@ -94,7 +109,6 @@ class MainWindow(TkinterBaseFrame):
             height=8,
             selectmode='single',
             width=13
-
         )
 
         def item_select(event):
@@ -107,7 +121,7 @@ class MainWindow(TkinterBaseFrame):
 
         box.bind('<<ListboxSelect>>', item_select)
 
-        box.grid(column=1, row=0, padx=5, pady=5)
+        box.grid(column=1, row=0, padx=5)
 
     def rooms_list(self):
         """Room List"""
@@ -132,3 +146,11 @@ class MainWindow(TkinterBaseFrame):
         box.bind('<<ListboxSelect>>', item_select)
 
         box.grid(column=1, row=1, padx=5, pady=5)
+
+    def input_fields(self):
+
+        field = ttk.Entry(self.frame,
+                          width=12,
+                          textvariable=self.field)
+
+        field.grid(column=0, row=5, pady=5)

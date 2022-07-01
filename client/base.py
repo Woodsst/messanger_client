@@ -1,5 +1,5 @@
 import abc
-from tkinter import Tk, ttk
+from tkinter import Tk, ttk, Toplevel
 from abc import ABC
 
 import grpc
@@ -56,3 +56,19 @@ class ConnectGRPC(ABCConnectGRPC):
         """Method to close connect after ended all operations"""
 
         self.channel.close()
+
+
+class TkinterToplevelFrame(FramesConstruct):
+    """Class for create secondary windows"""
+
+    def __init__(self):
+        self.root = Toplevel()
+        self.frame = ttk.Frame(self.root, padding=5)
+
+    def get_frame_constructing(self):
+        """Constructing frames"""
+        pass
+
+    def run(self):
+        self.frame.grid()
+        self.get_frame_constructing()

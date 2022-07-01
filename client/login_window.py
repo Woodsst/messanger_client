@@ -1,11 +1,11 @@
-from tkinter import StringVar, ttk, messagebox
+from tkinter import StringVar, ttk
 from client.base import TkinterBaseFrame
 from client.grpc_connect import AuthorizationServerConnector
-from client.authorization_api.authorization_pb2 import RegisterCodeResult, LoginCodeResult
 from client.main_window import MainWindow
+from client.status_code_handler import LoginStatusCodeHandler
 
 
-class Login(TkinterBaseFrame):
+class Login(TkinterBaseFrame, LoginStatusCodeHandler):
     """Login window"""
 
     def __init__(self, address_authorization_server: str,
@@ -75,45 +75,3 @@ class Login(TkinterBaseFrame):
         self.root.destroy()
         main = MainWindow(self.messanger_address, token)
         main.run()
-
-    @staticmethod
-    def registration_result_handler(result: RegisterCodeResult):
-        """Handle response server to registration request"""
-
-        if result == RegisterCodeResult.Value('RCR_ok'):
-            messagebox.showinfo(message='Thank you for registering',
-                                title='Registration')
-
-        elif result == RegisterCodeResult.Value('RCR_undefined'):
-            messagebox.showerror(message='Wrong username or password'
-                                 , title='Registration')
-
-        elif result == RegisterCodeResult.Value('RCR_already_exist'):
-            messagebox.showerror(message='User already exists',
-                                 title='Registration')
-
-        else:
-            messagebox.showerror(message='Unknown error',
-                                 title='Registration')
-
-    @staticmethod
-    def authorization_result_handler(result: RegisterCodeResult) -> bool:
-        """Handle response server to login request"""
-
-        if result == LoginCodeResult.Value('LCR_ok'):
-            messagebox.showinfo(message='Hello!',
-                                title='Registration')
-            return True
-
-        elif result == LoginCodeResult.Value('LCR_undefined'):
-            messagebox.showerror(message='Wrong username or password'
-                                 , title='Registration')
-
-        elif result == LoginCodeResult.Value('LCR_unknown_user'):
-            messagebox.showerror(message="User not found",
-                                 title='Registration')
-
-        else:
-            messagebox.showerror(message='Unknown error',
-                                 title='Registration')
-        return False
