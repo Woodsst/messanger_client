@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-service Greeter { // Server
+service Authorization { // Server
   rpc Register (RegisterRequest) returns (RegisterReply) {}
   rpc Login (LoginRequest) returns (LoginReply) {}
 }

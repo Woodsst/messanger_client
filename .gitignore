@@ -2,3 +2,5 @@ venv
 .idea
 client/ex.py
 client/__pycache__/
+client/authorization_api/__pycache__/
+client/messanger_api/__pycache__/

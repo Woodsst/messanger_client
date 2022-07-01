@@ -1,7 +1,7 @@
 from tkinter import StringVar, ttk, messagebox
 from client.base import TkinterBaseFrame
 from client.grpc_connect import AuthorizationServerConnector
-from client.authorization_pb2 import RegisterCodeResult, LoginCodeResult
+from client.authorization_api.authorization_pb2 import RegisterCodeResult, LoginCodeResult
 from client.main_window import MainWindow
 
 

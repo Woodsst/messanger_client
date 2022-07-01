@@ -2,10 +2,10 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import client.authorization_pb2 as authorization__pb2
+import client.authorization_api.authorization_pb2 as authorization__pb2
 
 
-class GreeterStub(object):
+class AuthorizationStub(object):
     """Server
     """
 
@@ -16,18 +16,18 @@ class GreeterStub(object):
             channel: A grpc.Channel.
         """
         self.Register = channel.unary_unary(
-                '/Greeter/Register',
+                '/Authorization/Register',
                 request_serializer=authorization__pb2.RegisterRequest.SerializeToString,
                 response_deserializer=authorization__pb2.RegisterReply.FromString,
                 )
         self.Login = channel.unary_unary(
-                '/Greeter/Login',
+                '/Authorization/Login',
                 request_serializer=authorization__pb2.LoginRequest.SerializeToString,
                 response_deserializer=authorization__pb2.LoginReply.FromString,
                 )
 
 
-class GreeterServicer(object):
+class AuthorizationServicer(object):
     """Server
     """
 
@@ -44,7 +44,7 @@ class GreeterServicer(object):
         raise NotImplementedError('Method not implemented!')
 
 
-def add_GreeterServicer_to_server(servicer, server):
+def add_AuthorizationServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'Register': grpc.unary_unary_rpc_method_handler(
                     servicer.Register,
@@ -58,12 +58,12 @@ def add_GreeterServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'Greeter', rpc_method_handlers)
+            'Authorization', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class Greeter(object):
+class Authorization(object):
     """Server
     """
 
@@ -78,7 +78,7 @@ class Greeter(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Greeter/Register',
+        return grpc.experimental.unary_unary(request, target, '/Authorization/Register',
             authorization__pb2.RegisterRequest.SerializeToString,
             authorization__pb2.RegisterReply.FromString,
             options, channel_credentials,
@@ -95,7 +95,7 @@ class Greeter(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/Greeter/Login',
+        return grpc.experimental.unary_unary(request, target, '/Authorization/Login',
             authorization__pb2.LoginRequest.SerializeToString,
             authorization__pb2.LoginReply.FromString,
             options, channel_credentials,
