@@ -54,7 +54,7 @@ class MessangerStatusCodeHandler:
     """A class for handling response code statuses"""
 
     @staticmethod
-    def result_handler(result: CodeResult) -> bool:
+    def friend_request_handler(result: CodeResult) -> bool:
         """Handle response server to add friend request"""
 
         if result == CodeResult.Value('ok'):
@@ -69,3 +69,20 @@ class MessangerStatusCodeHandler:
         else:
             messagebox.showerror(message='Unknown error',
                                  title='Friend add')
+
+    @staticmethod
+    def friend_remove_request_handler(result: CodeResult) -> bool:
+        """Handle response server to remove friend request"""
+
+        if result == CodeResult.Value('ok'):
+            messagebox.showinfo(message='Friend remove in your friend list',
+                                title='Friend remove')
+            return True
+
+        elif result == CodeResult.Value('bad'):
+            messagebox.showerror(message='Friend not in friend list or does not exist',
+                                 title='Friend remove')
+
+        else:
+            messagebox.showerror(message='Unknown error',
+                                 title='Friend remove')

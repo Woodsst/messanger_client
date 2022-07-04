@@ -18,12 +18,13 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
         self.room_list = ['room_1', 'room_2']
         self.field = StringVar()
         self.get_frame_constructing()
+        self.select = None
         self.connect = MessangerServerConnector(
             server_address
         )
 
     def get_frame_constructing(self):
-        """Get all frames"""
+        """Show all frames"""
 
         self.friends_list()
         self.rooms_list()
@@ -31,18 +32,29 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
         self.input_fields()
 
     def add_friend(self):
+        """Actions when clicking the "Add friend" button"""
+
         get_field = self.field.get()
         result = self.connect.add_friend(
-            get_field,
-            self.token
+            friend_name=get_field,
+            token=self.token
         )
-        status = self.result_handler(result.status)
+        status = self.friend_request_handler(result.status)
         if status:
             self.friend_list.append(get_field)
             self.friends_list()
 
     def delete_friend(self):
-        pass
+        """Actions when clicking the "Remove friend" button"""
+
+        result = self.connect.remove_friend(
+            friend_name=self.select,
+            token=self.token
+        )
+        status = self.friend_remove_request_handler(result.status)
+        if status:
+            self.friend_list.remove(self.select)
+            self.friends_list()
 
     def create_room(self):
         pass
@@ -115,7 +127,7 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
             """Selecting an element for actions with it"""
             select_ = box.curselection()
             try:
-                print(self.friend_list[select_[0]])
+                self.select = self.friend_list[select_[0]]
             except IndexError:
                 pass
 
@@ -139,7 +151,7 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
             """Selecting an element for actions with it"""
             select_ = box.curselection()
             try:
-                print(self.room_list[select_[0]])
+                self.select = self.room_list[select_[0]]
             except IndexError:
                 pass
 
