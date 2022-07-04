@@ -57,7 +57,17 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
             self.friends_list()
 
     def create_room(self):
-        pass
+        """Actions when clicking the "Create room" button"""
+
+        get_field = self.field.get()
+        result = self.connect.create_room(
+            room=get_field,
+            token=self.token
+        )
+        status = self.rooms_request_handler(result.status)
+        if status:
+            self.room_list.append(get_field)
+            self.rooms_list()
 
     def dialog_window(self):
         pass

@@ -86,3 +86,20 @@ class MessangerStatusCodeHandler:
         else:
             messagebox.showerror(message='Unknown error',
                                  title='Friend remove')
+
+    @staticmethod
+    def rooms_request_handler(result: CodeResult) -> bool:
+        """Handle response server to remove friend request"""
+
+        if result == CodeResult.Value('ok'):
+            messagebox.showinfo(message='Create room',
+                                title='Room')
+            return True
+
+        elif result == CodeResult.Value('bad'):
+            messagebox.showerror(message='Create room error',
+                                 title='Room')
+
+        else:
+            messagebox.showerror(message='Unknown error',
+                                 title='Room')
