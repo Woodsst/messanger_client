@@ -61,11 +61,11 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
         """Actions when clicking the "Create room" button"""
 
         get_field = self.field.get()
-        result = self.connect.create_room(
+        response = self.connect.create_room(
             room=get_field,
             token=self.token
         )
-        status = self.rooms_request_handler(result.status)
+        status = self.create_room_request_handler(response.status)
         if status:
             self.room_list.append(get_field)
             self.rooms_list()
@@ -78,8 +78,26 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
     def delete_room(self):
         pass
 
+    def leave_room(self):
+        """Actions when clicking the "leave room" button"""
+
+        if self.select is not None:
+            response = self.connect.leave_room(room=self.select,
+                                                token=self.token)
+            status = self.leave_room_request_handler(response.status)
+            if status:
+                self.room_list.remove(self.select)
+                self.rooms_list()
+
     def buttons(self):
         """Buttons collection"""
+
+        leave_room = ttk.Button(
+            self.frame,
+            width=11,
+            text='leave room',
+            command=self.leave_room
+        )
 
         add_friend = ttk.Button(
             self.frame,
@@ -122,6 +140,7 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
         create_room.grid(column=0, row=2)
         delete_room.grid(column=0, row=3)
         delete_friend.grid(column=0, row=4)
+        leave_room.grid(column=0, row=5)
 
     def friends_list(self):
         """Friend List"""
@@ -178,4 +197,4 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
                           width=12,
                           textvariable=self.field)
 
-        field.grid(column=0, row=5, pady=5)
+        field.grid(column=0, row=6, pady=5)

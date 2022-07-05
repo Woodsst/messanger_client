@@ -1,7 +1,7 @@
 from client.base import ConnectGRPC
 from client.authorization_api.authorization_pb2 import RegisterRequest, LoginRequest, RegisterReply, LoginReply
 from client.authorization_api.authorization_pb2_grpc import AuthorizationStub
-from client.messanger_api.messanger_pb2 import AddFriendRequest, Response, RemoveFriendRequest, CreateRoomRequest
+from client.messanger_api.messanger_pb2 import AddFriendRequest, Response, RemoveFriendRequest, CreateRoomRequest, EscapeRoomRequest
 from client.messanger_api.messanger_pb2_grpc import MessangerStub
 
 
@@ -65,6 +65,17 @@ class MessangerServerConnector(ConnectGRPC):
 
         response = self.stub.CreateRoom(
             CreateRoomRequest(
+                room=room,
+                credentials=token
+            )
+        )
+        return response
+
+    def leave_room(self, room: str, token: str) -> Response:
+        """Request to remove room"""
+
+        response = self.stub.RoomEscape(
+            EscapeRoomRequest(
                 room=room,
                 credentials=token
             )

@@ -88,8 +88,8 @@ class MessangerStatusCodeHandler:
                                  title='Friend remove')
 
     @staticmethod
-    def rooms_request_handler(result: CodeResult) -> bool:
-        """Handle response server to remove friend request"""
+    def create_room_request_handler(result: CodeResult) -> bool:
+        """Handle response server to create room request"""
 
         if result == CodeResult.Value('ok'):
             messagebox.showinfo(message='Create room',
@@ -98,6 +98,23 @@ class MessangerStatusCodeHandler:
 
         elif result == CodeResult.Value('bad'):
             messagebox.showerror(message='Create room error',
+                                 title='Room')
+
+        else:
+            messagebox.showerror(message='Unknown error',
+                                 title='Room')
+
+    @staticmethod
+    def leave_room_request_handler(result: CodeResult) -> bool:
+        """Handle response server to leave room request"""
+
+        if result == CodeResult.Value('ok'):
+            messagebox.showinfo(message='leave room',
+                                title='Room')
+            return True
+
+        elif result == CodeResult.Value('bad'):
+            messagebox.showerror(message='Room error',
                                  title='Room')
 
         else:
