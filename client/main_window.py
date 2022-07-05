@@ -4,6 +4,7 @@ from tkinter import ttk, StringVar
 from client.base import TkinterBaseFrame
 from client.grpc_connect import MessangerServerConnector
 from client.status_code_handler import MessangerStatusCodeHandler
+from client.messages_window import MessagesWindow
 
 
 class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
@@ -70,7 +71,9 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
             self.rooms_list()
 
     def dialog_window(self):
-        pass
+        if self.select is not None:
+            window = MessagesWindow(self.select)
+            window.run()
 
     def delete_room(self):
         pass

@@ -26,6 +26,7 @@ class TkinterBaseFrame(FramesConstruct):
         self.root = Tk()
         self.frame = ttk.Frame(self.root, padding=5)
         self.frame.grid()
+        self.root.resizable(width=False, height=False)
 
     def run(self):
         """Start show app"""
@@ -64,6 +65,7 @@ class TkinterToplevelFrame(FramesConstruct):
     def __init__(self):
         self.root = Toplevel()
         self.frame = ttk.Frame(self.root, padding=5)
+        self.root.resizable(width=False, height=False)
 
     def get_frame_constructing(self):
         """Constructing frames"""
