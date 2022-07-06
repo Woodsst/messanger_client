@@ -1,6 +1,9 @@
+import json
+import time
 import tkinter
 from tkinter import ttk, StringVar
 
+from threading import Thread
 from client.base import TkinterBaseFrame
 from client.grpc_connect import MessangerServerConnector
 from client.status_code_handler import MessangerStatusCodeHandler
@@ -15,8 +18,8 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
         TkinterBaseFrame.__init__(self)
         self.messanger_address = server_address
         self.token = token
-        self.friend_list = ['user_1', 'user_2']
-        self.room_list = ['room_1', 'room_2']
+        self.friend_list = []
+        self.room_list = []
         self.field = StringVar()
         self.get_frame_constructing()
         self.select = None
@@ -52,7 +55,6 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
             token=self.token
         )
         if self.friend_remove_request_handler(result.status):
-            self.friend_list.remove(self.select)
             self.friends_list()
 
     def create_room(self):
@@ -64,7 +66,6 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
             token=self.token
         )
         if self.create_room_request_handler(response.status):
-            self.room_list.append(get_field)
             self.rooms_list()
 
     def dialog_window(self):
@@ -84,7 +85,6 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
                 token=self.token
             )
             if self.delete_room_request_handler(response.status):
-                self.room_list.remove(select)
                 self.rooms_list()
 
     def leave_room(self):
@@ -95,7 +95,6 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
                                                token=self.token)
             status = self.leave_room_request_handler(response.status)
             if status:
-                self.room_list.remove(self.select)
                 self.rooms_list()
 
     def buttons(self):
@@ -207,3 +206,24 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
                           textvariable=self.field)
 
         field.grid(column=0, row=6, pady=5)
+
+    def update(self):
+        """Thread for update"""
+
+        while True:
+            data = self.connect.update_data(self.token)
+            data_dict = json.loads(data.json_info)
+            if self.friend_list != data_dict['info']["friend_list"]:
+                self.friend_list = data_dict['info']["friend_list"]
+                self.friends_list()
+            elif self.room_list != data_dict['info']['room_list']:
+                self.room_list = data_dict['info']['room_list']
+                self.rooms_list()
+            time.sleep(5)
+
+    def run(self):
+        """Run all thread and tkinter mainloop"""
+
+        thread = Thread(target=self.update, daemon=True)
+        thread.start()
+        self.root.mainloop()

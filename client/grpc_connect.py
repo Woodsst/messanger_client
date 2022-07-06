@@ -1,7 +1,10 @@
+import time
+
 from client.base import ConnectGRPC
 from client.authorization_api.authorization_pb2 import RegisterRequest, LoginRequest, RegisterReply, LoginReply
 from client.authorization_api.authorization_pb2_grpc import AuthorizationStub
-from client.messanger_api.messanger_pb2 import AddFriendRequest, Response, RemoveFriendRequest, CreateRoomRequest, EscapeRoomRequest, RemoveRoomReqeust
+from client.messanger_api.messanger_pb2 import RequestSelfInfo, AddFriendRequest, Response, RemoveFriendRequest, \
+    CreateRoomRequest, EscapeRoomRequest, RemoveRoomReqeust, ClientInfo
 from client.messanger_api.messanger_pb2_grpc import MessangerStub
 
 
@@ -92,3 +95,14 @@ class MessangerServerConnector(ConnectGRPC):
             )
         )
         return response
+
+    def update_data(self, token: str) -> ClientInfo:
+        """Request to update data"""
+
+        client_info = self.stub.InformationRequest(
+            RequestSelfInfo(
+                credentials=token,
+                time=int(time.time())
+            )
+        )
+        return client_info
