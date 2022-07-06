@@ -40,8 +40,7 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
             friend_name=get_field,
             token=self.token
         )
-        status = self.friend_request_handler(result.status)
-        if status:
+        if self.friend_request_handler(result.status):
             self.friend_list.append(get_field)
             self.friends_list()
 
@@ -52,8 +51,7 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
             friend_name=self.select,
             token=self.token
         )
-        status = self.friend_remove_request_handler(result.status)
-        if status:
+        if self.friend_remove_request_handler(result.status):
             self.friend_list.remove(self.select)
             self.friends_list()
 
@@ -65,25 +63,36 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
             room=get_field,
             token=self.token
         )
-        status = self.create_room_request_handler(response.status)
-        if status:
+        if self.create_room_request_handler(response.status):
             self.room_list.append(get_field)
             self.rooms_list()
 
     def dialog_window(self):
+        """Window for send messages to a room or other client"""
+
         if self.select is not None:
             window = MessagesWindow(self.select)
             window.run()
 
     def delete_room(self):
-        pass
+        """Actions when clicking the "Delete room" button"""
+
+        if self.select is not None:
+            select = self.select
+            response = self.connect.delete_room(
+                room=select,
+                token=self.token
+            )
+            if self.delete_room_request_handler(response.status):
+                self.room_list.remove(select)
+                self.rooms_list()
 
     def leave_room(self):
         """Actions when clicking the "leave room" button"""
 
         if self.select is not None:
             response = self.connect.leave_room(room=self.select,
-                                                token=self.token)
+                                               token=self.token)
             status = self.leave_room_request_handler(response.status)
             if status:
                 self.room_list.remove(self.select)

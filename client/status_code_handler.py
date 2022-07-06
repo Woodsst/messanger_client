@@ -120,3 +120,20 @@ class MessangerStatusCodeHandler:
         else:
             messagebox.showerror(message='Unknown error',
                                  title='Room')
+
+    @staticmethod
+    def delete_room_request_handler(result: CodeResult) -> bool:
+        """Handle response server to delete room request"""
+
+        if result == CodeResult.Value('ok'):
+            messagebox.showinfo(message='Room delete',
+                                title='Room')
+            return True
+
+        elif result == CodeResult.Value('bad'):
+            messagebox.showerror(message='Room error',
+                                 title='Room')
+
+        else:
+            messagebox.showerror(message='Unknown error',
+                                 title='Room')
