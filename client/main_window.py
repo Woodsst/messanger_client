@@ -97,8 +97,20 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
             if status:
                 self.rooms_list()
 
+    def join_room(self):
+        result = self.connect.join_room(room=self.field.get(),
+                                        token=self.token)
+        self.join_room_request_handler(result)
+
     def buttons(self):
         """Buttons collection"""
+
+        join_room = ttk.Button(
+            self.frame,
+            width=11,
+            text='join room',
+            command=self.join_room
+        )
 
         leave_room = ttk.Button(
             self.frame,
@@ -149,6 +161,7 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
         delete_room.grid(column=0, row=3)
         delete_friend.grid(column=0, row=4)
         leave_room.grid(column=0, row=5)
+        join_room.grid(column=0, row=6)
 
     def friends_list(self):
         """Friend List"""
@@ -205,7 +218,7 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
                           width=12,
                           textvariable=self.field)
 
-        field.grid(column=0, row=6, pady=5)
+        field.grid(column=0, row=7, pady=5)
 
     def update(self):
         """Thread for update"""
