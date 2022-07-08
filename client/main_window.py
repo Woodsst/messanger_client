@@ -13,9 +13,9 @@ from client.messages_window import MessagesWindow
 class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
     """Central window"""
 
-    def __init__(self, server_address: str, token: str):
+    def __init__(self, server_address: str, token: str, name: str):
 
-        TkinterBaseFrame.__init__(self)
+        TkinterBaseFrame.__init__(self, name)
         self.messanger_address = server_address
         self.token = token
         self.friend_list = []

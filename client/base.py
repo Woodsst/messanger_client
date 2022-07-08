@@ -22,9 +22,10 @@ class FramesConstruct(ABC):
 class TkinterBaseFrame(FramesConstruct):
     """Base for all frames"""
 
-    def __init__(self):
+    def __init__(self, name: str):
         self.root = Tk()
         self.frame = ttk.Frame(self.root, padding=5)
+        self.root.title(name)
         self.frame.grid()
         self.root.resizable(width=False, height=False)
 

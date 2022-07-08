@@ -9,8 +9,9 @@ class Login(TkinterBaseFrame, LoginStatusCodeHandler):
     """Login window"""
 
     def __init__(self, address_authorization_server: str,
-                 address_messanger_server: str):
-        TkinterBaseFrame.__init__(self)
+                 address_messanger_server: str, name: str):
+
+        TkinterBaseFrame.__init__(self, name)
         self.messanger_address = address_messanger_server
         self.server_address = address_authorization_server
         self.root.wm_title("Login")
@@ -73,5 +74,5 @@ class Login(TkinterBaseFrame, LoginStatusCodeHandler):
         """Destroy login window and run main window"""
 
         self.root.destroy()
-        main = MainWindow(self.messanger_address, token)
+        main = MainWindow(self.messanger_address, token, self.username.get())
         main.run()
