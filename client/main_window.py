@@ -72,7 +72,8 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
         """Window for send messages to a room or other client"""
 
         if self.select is not None:
-            window = MessagesWindow(self.select)
+            window = MessagesWindow(self.select, self.messanger_address,
+                                    self.token)
             window.run()
 
     def delete_room(self):

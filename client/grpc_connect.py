@@ -4,7 +4,7 @@ from client.base import ConnectGRPC
 from client.authorization_api.authorization_pb2 import RegisterRequest, LoginRequest, RegisterReply, LoginReply
 from client.authorization_api.authorization_pb2_grpc import AuthorizationStub
 from client.messanger_api.messanger_pb2 import RequestSelfInfo, AddFriendRequest, Response, RemoveFriendRequest, \
-    CreateRoomRequest, EscapeRoomRequest, RemoveRoomReqeust, ClientInfo, JoinRoomRequest
+    CreateRoomRequest, EscapeRoomRequest, RemoveRoomReqeust, ClientInfo, JoinRoomRequest, Message
 from client.messanger_api.messanger_pb2_grpc import MessangerStub
 
 
@@ -113,6 +113,19 @@ class MessangerServerConnector(ConnectGRPC):
         response = self.stub.JoinRoom(
             JoinRoomRequest(
                 room=room,
+                credentials=token
+            )
+        )
+
+        return response
+
+    def send_message(self, message: str, token: str, address: str) -> Response:
+        """Request to send message"""
+
+        response = self.stub.SendMessage(
+            Message(
+                message=message,
+                addressee=address,
                 credentials=token
             )
         )
