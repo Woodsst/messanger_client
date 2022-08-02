@@ -225,13 +225,14 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
         """Thread for update"""
 
         while True:
-            data = self.connect.update_data(self.token)
+            data = self.connect.update_data(self.token, int(time.time()))
             data_dict = json.loads(data.json_info)
-            if self.friend_list != data_dict['info']["friend_list"]:
-                self.friend_list = data_dict['info']["friend_list"]
+            print(data_dict)
+            if self.friend_list != data_dict["friend_list"]:
+                self.friend_list = data_dict["friend_list"]
                 self.friends_list()
-            elif self.room_list != data_dict['info']['room_list']:
-                self.room_list = data_dict['info']['room_list']
+            elif self.room_list != data_dict['room_list']:
+                self.room_list = data_dict['room_list']
                 self.rooms_list()
             time.sleep(5)
 

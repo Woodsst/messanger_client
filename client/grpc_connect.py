@@ -96,13 +96,13 @@ class MessangerServerConnector(ConnectGRPC):
         )
         return response
 
-    def update_data(self, token: str) -> ClientInfo:
+    def update_data(self, token: str, time_: int) -> ClientInfo:
         """Request to update data"""
 
         client_info = self.stub.InformationRequest(
             RequestSelfInfo(
                 credentials=token,
-                time=int(time.time())
+                time=time_
             )
         )
         return client_info
