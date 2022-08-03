@@ -179,6 +179,7 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
 
         def item_select(event):
             """Selecting an element for actions with it"""
+
             select_ = box.curselection()
             try:
                 self.select = self.friend_list[select_[0]]
@@ -221,13 +222,12 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
 
         field.grid(column=0, row=7, pady=5)
 
-    def update(self):
+    def update_friends_rooms(self):
         """Thread for update"""
 
         while True:
             data = self.connect.update_data(self.token, int(time.time()))
             data_dict = json.loads(data.json_info)
-            print(data_dict)
             if self.friend_list != data_dict["friend_list"]:
                 self.friend_list = data_dict["friend_list"]
                 self.friends_list()
@@ -239,6 +239,6 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
     def run(self):
         """Run all thread and tkinter mainloop"""
 
-        thread = Thread(target=self.update, daemon=True)
+        thread = Thread(target=self.update_friends_rooms, daemon=True)
         thread.start()
         self.root.mainloop()

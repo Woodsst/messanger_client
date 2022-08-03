@@ -4,7 +4,7 @@ from client.base import ConnectGRPC
 from client.authorization_api.authorization_pb2 import RegisterRequest, LoginRequest, RegisterReply, LoginReply
 from client.authorization_api.authorization_pb2_grpc import AuthorizationStub
 from client.messanger_api.messanger_pb2 import RequestSelfInfo, AddFriendRequest, Response, RemoveFriendRequest, \
-    CreateRoomRequest, EscapeRoomRequest, RemoveRoomReqeust, ClientInfo, JoinRoomRequest, Message
+    CreateRoomRequest, EscapeRoomRequest, RemoveRoomReqeust, ClientInfo, JoinRoomRequest, Message, MessagesUpdateRequest
 from client.messanger_api.messanger_pb2_grpc import MessangerStub
 
 
@@ -127,6 +127,19 @@ class MessangerServerConnector(ConnectGRPC):
                 message=message,
                 addressee=address,
                 credentials=token
+            )
+        )
+
+        return response
+
+    def update_messages(self, token: str, unit: str, last_update_time: int):
+        """Request to receive new messages"""
+
+        response = self.stub.MessagesUpdate(
+            MessagesUpdateRequest(
+                credentials=token,
+                update=unit,
+                time=last_update_time
             )
         )
 
