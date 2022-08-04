@@ -33,7 +33,15 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
         self.friends_list()
         self.rooms_list()
         self.buttons()
+        self.labels()
         self.input_fields()
+
+    def labels(self):
+        friends = ttk.Label(self.frame, text='Friends')
+        rooms = ttk.Label(self.frame, text='Rooms')
+
+        friends.grid(column=1, row=4, sticky='sw')
+        rooms.grid(column=0, row=4, sticky='sw')
 
     def add_friend(self):
         """Actions when clicking the "Add friend" button"""
@@ -159,10 +167,10 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
         open_dialog.grid(column=0, row=0)
         add_friend.grid(column=0, row=1)
         create_room.grid(column=0, row=2)
-        delete_room.grid(column=0, row=3)
-        delete_friend.grid(column=0, row=4)
-        leave_room.grid(column=0, row=5)
-        join_room.grid(column=0, row=6)
+        delete_room.grid(column=1, row=0)
+        delete_friend.grid(column=1, row=1)
+        leave_room.grid(column=1, row=2)
+        join_room.grid(column=1, row=3)
 
     def friends_list(self):
         """Friend List"""
@@ -188,7 +196,7 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
 
         box.bind('<<ListboxSelect>>', item_select)
 
-        box.grid(column=1, row=0, padx=5)
+        box.grid(column=0, row=1, sticky='e', padx=2)
 
     def rooms_list(self):
         """Room List"""
@@ -199,7 +207,7 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
             self.root,
             listvariable=room_list_var,
             height=8,
-            width=13
+            width=12
         )
 
         def item_select(event):
@@ -212,7 +220,7 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
 
         box.bind('<<ListboxSelect>>', item_select)
 
-        box.grid(column=1, row=1, padx=5, pady=5)
+        box.grid(column=0, row=1, sticky='w', padx=2, pady=2)
 
     def input_fields(self):
 
@@ -220,7 +228,7 @@ class MainWindow(TkinterBaseFrame, MessangerStatusCodeHandler):
                           width=12,
                           textvariable=self.field)
 
-        field.grid(column=0, row=7, pady=5)
+        field.grid(column=0, row=3, pady=5, padx=2)
 
     def update_friends_rooms(self):
         """Thread for update"""
